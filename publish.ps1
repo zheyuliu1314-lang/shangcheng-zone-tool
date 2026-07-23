@@ -21,6 +21,12 @@ if ($LASTEXITCODE -ne 0) {
 }
 $token = $env:GITHUB_TOKEN
 if (-not $token) {
+    $env:GIT_TERMINAL_PROMPT = "1"
+    & $git push origin main
+    if ($LASTEXITCODE -eq 0) {
+        Write-Host "Push completed. Render will deploy the latest commit."
+        exit 0
+    }
     $secureToken = Read-Host "Enter GitHub fine-grained token (used only for this push)" -AsSecureString
     $token = [Runtime.InteropServices.Marshal]::PtrToStringBSTR([Runtime.InteropServices.Marshal]::SecureStringToBSTR($secureToken))
 }
