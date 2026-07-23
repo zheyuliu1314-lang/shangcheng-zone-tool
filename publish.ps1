@@ -14,12 +14,11 @@ if (-not (Test-Path -LiteralPath $git)) {
 
 & $git add .
 & $git diff --cached --quiet
-if ($LASTEXITCODE -eq 0) {
-    Write-Host "No new changes."
-    exit 0
+if ($LASTEXITCODE -ne 0) {
+    & $git commit -m $Message
+} else {
+    Write-Host "No new file changes; checking for unpushed commits."
 }
-
-& $git commit -m $Message
 $token = $env:GITHUB_TOKEN
 if (-not $token) {
     $secureToken = Read-Host "Enter GitHub fine-grained token (used only for this push)" -AsSecureString
