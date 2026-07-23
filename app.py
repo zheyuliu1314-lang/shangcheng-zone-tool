@@ -935,13 +935,7 @@ def get_zones():
 
 @app.route("/api/zones", methods=["POST"])
 def save_zones_route():
-    raw = (request.get_json(silent=True) or {}).get("zones", [])
-    zones, errors = normalize_zones(raw)
-    if errors:
-        return jsonify({"error": "；".join(errors)}), 400
-    payload = {"updated_at": utc_now(), "zones": zones}
-    save_zones(zones)
-    return jsonify({"status": "ok", "count": len(zones), "updated_at": payload["updated_at"]})
+    return jsonify({"error": "公共片区配置已停用，请在浏览器本地保存片区"}), 410
 
 def build_export(results, headers, zone_color_map):
     wb = openpyxl.Workbook()
