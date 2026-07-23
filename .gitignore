@@ -5,6 +5,7 @@ __pycache__/
 server.log
 server.log.*
 srv_*.log
+server_*.log
 *.xlsx
 excel_items.json
 screenshot.png
