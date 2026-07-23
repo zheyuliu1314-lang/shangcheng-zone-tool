@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+.env
+.env.*
+server.log
+server.log.*
+srv_*.log
+*.xlsx
+excel_items.json
+screenshot.png
+shangcheng-zone-tool-upload.zip
+shangcheng-zone-tool-upload/
+dist/
+.netlify/
