@@ -1,5 +1,5 @@
 param(
-    [string]$Message = "更新片区分类工具"
+    [string]$Message = "Update project"
 )
 
 $ErrorActionPreference = "Stop"
@@ -9,22 +9,27 @@ if (-not (Test-Path -LiteralPath $git)) {
     if ($gitCommand) { $git = $gitCommand.Source }
 }
 if (-not (Test-Path -LiteralPath $git)) {
-    throw "未找到 Git，请先安装 Git for Windows。"
+    throw "Git was not found. Install Git for Windows first."
 }
 
-& $git add app.py templates requirements.txt render.yaml netlify.toml netlify-site scripts zones.json README.md .gitignore publish.ps1
-if ((& $git diff --cached --quiet) -and ($LASTEXITCODE -eq 0)) {
-    Write-Host "没有新的代码修改。"
+& $git add .
+& $git diff --cached --quiet
+if ($LASTEXITCODE -eq 0) {
+    Write-Host "No new changes."
     exit 0
 }
+
 & $git commit -m $Message
 $token = $env:GITHUB_TOKEN
 if (-not $token) {
-    $secureToken = Read-Host "请输入 GitHub fine-grained token（仅本次使用，不会写入文件）" -AsSecureString
+    $secureToken = Read-Host "Enter GitHub fine-grained token (used only for this push)" -AsSecureString
     $token = [Runtime.InteropServices.Marshal]::PtrToStringBSTR([Runtime.InteropServices.Marshal]::SecureStringToBSTR($secureToken))
 }
-if (-not $token) { throw "未提供 GitHub token，已取消推送。" }
+if (-not $token) { throw "No GitHub token was provided." }
+
 $env:GIT_TERMINAL_PROMPT = "0"
 & $git -c "http.extraheader=AUTHORIZATION: bearer $token" push origin main
-if ($LASTEXITCODE -ne 0) { throw "GitHub 推送失败，请检查 token 是否拥有该仓库的 Contents: Read and write 权限。" }
-Write-Host "代码已推送到 GitHub，Render 将自动部署。"
+if ($LASTEXITCODE -ne 0) {
+    throw "GitHub push failed. Check token repository Contents write permission."
+}
+Write-Host "Push completed. Render will deploy the latest commit."
