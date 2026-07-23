@@ -1,0 +1,19 @@
+﻿=======================================================
+  Ƭ�����࿪������ v1.3
+  �����ַ: http://localhost:5050
+  GCJ-02���� + �ߵµ�ͼ��Ƭ
+=======================================================
+ * Serving Flask app 'app'
+ * Debug mode: off
+python.exe : WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI ser
+ver instead.
+所在位置 行:7 字符: 1
++ & $python $app 2>&1 | Out-File -FilePath $log -Encoding UTF8 -Append
++ ~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (WARNING: This i...server instead.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5050
+ * Running on http://192.168.31.224:5050
+Press CTRL+C to quit

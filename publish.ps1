@@ -18,5 +18,13 @@ if ((& $git diff --cached --quiet) -and ($LASTEXITCODE -eq 0)) {
     exit 0
 }
 & $git commit -m $Message
-& $git push origin main
+$token = $env:GITHUB_TOKEN
+if (-not $token) {
+    $secureToken = Read-Host "请输入 GitHub fine-grained token（仅本次使用，不会写入文件）" -AsSecureString
+    $token = [Runtime.InteropServices.Marshal]::PtrToStringBSTR([Runtime.InteropServices.Marshal]::SecureStringToBSTR($secureToken))
+}
+if (-not $token) { throw "未提供 GitHub token，已取消推送。" }
+$env:GIT_TERMINAL_PROMPT = "0"
+& $git -c "http.extraheader=AUTHORIZATION: bearer $token" push origin main
+if ($LASTEXITCODE -ne 0) { throw "GitHub 推送失败，请检查 token 是否拥有该仓库的 Contents: Read and write 权限。" }
 Write-Host "代码已推送到 GitHub，Render 将自动部署。"
