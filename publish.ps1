@@ -27,7 +27,10 @@ if (-not $token) {
 if (-not $token) { throw "No GitHub token was provided." }
 
 $env:GIT_TERMINAL_PROMPT = "0"
-& $git -c "http.extraheader=AUTHORIZATION: bearer $token" push origin main
+$username = "zheyuliu1314-lang"
+$basicBytes = [Text.Encoding]::ASCII.GetBytes("$username`:$token")
+$basicToken = [Convert]::ToBase64String($basicBytes)
+& $git -c "http.extraheader=AUTHORIZATION: Basic $basicToken" push origin main
 if ($LASTEXITCODE -ne 0) {
     throw "GitHub push failed. Check token repository Contents write permission."
 }
